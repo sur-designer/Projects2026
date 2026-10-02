@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SpeakUp English Tutor</title>
+  <meta name="description" content="A free AI English speaking coach: conversations with instant corrections, pronunciation practice, job interview simulator and IELTS speaking mock tests.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗣️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=11">
+</head>
+<body data-view="home">
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><span class="logo">S</span><span>SpeakUp</span></div>
+    <nav class="nav" aria-label="Main">
+      <button data-view="home" class="active"><span class="ico">🏠</span><span>Home</span></button>
+      <button data-view="talk"><span class="ico">💬</span><span>Talk</span></button>
+      <button data-view="ielts"><span class="ico">🎓</span><span>IELTS</span></button>
+      <button data-view="pron"><span class="ico">🗣️</span><span>Pronounce</span></button>
+      <button data-view="level"><span class="ico">📊</span><span>Level</span></button>
+      <button data-view="progress"><span class="ico">📈</span><span>Progress</span></button>
+      <button data-view="settings"><span class="ico">⚙️</span><span>Settings</span></button>
+    </nav>
+    <p class="sidebar-foot">100% free · your data stays in this browser</p>
+  </aside>
+
+  <main id="main">
+    <!-- HOME -->
+    <section class="view active" id="view-home">
+      <header class="hero">
+        <div>
+          <p class="eyebrow" id="greet">Welcome 👋</p>
+          <h1 id="heroTitle">Speak English with confidence.</h1>
+          <p class="lead">Your free AI speaking coach: real conversations with instant corrections, pronunciation drills, a job-interview simulator and IELTS speaking mock tests.</p>
+        </div>
+        <div class="hero-stats" id="heroStats"></div>
+      </header>
+
+      <div class="banner hidden" id="setupBanner">
+        <div><strong>One-time setup: connect a free AI brain</strong><p>Get a free Google Gemini key in about a minute. No credit card needed. Pronunciation practice already works without it.</p></div>
+        <button class="btn primary" data-go="settings">Set up now</button>
+      </div>
+      <div class="banner warn hidden" id="browserBanner">
+        <div><strong>Voice input isn't supported in this browser</strong><p>Open this page in Google Chrome or Microsoft Edge to speak. You can still type your answers here.</p></div>
+      </div>
+
+      <div class="card lang-bar">
+        <label class="switch" title="Practise Spanish, French, Hindi or Marathi as well as English">
+          <input type="checkbox" id="multiLang"><span class="track"></span><span>🌍 Multiple languages</span>
+        </label>
+        <div class="tabs lang-tabs hidden" id="langTabs" aria-label="Language to practise"></div>
+        <p class="muted small" id="langNote"></p>
+      </div>
+
+      <div class="grid cards">
+        <button class="card feature big" data-go="talk">
+          <span class="card-icon">💬</span><strong>AI Conversation</strong>
+          <small>Talk about anything or role-play real situations. You get grammar corrections and more natural phrasing after every answer.</small>
+          <span class="go">Start talking →</span>
+        </button>
+        <button class="card feature" data-go="scenario:interview">
+          <span class="card-icon">💼</span><strong>Job Interview Simulator</strong>
+          <small>Practise for any role with realistic questions and follow-ups.</small>
+        </button>
+        <button class="card feature" data-go="ielts">
+          <span class="card-icon">🎓</span><strong>IELTS Speaking Mock</strong>
+          <small>A timed Parts 1, 2 and 3 test with a video examiner room and band scores.</small>
+        </button>
+        <button class="card feature" data-go="pron">
+          <span class="card-icon">🗣️</span><strong>Pronunciation Coach</strong>
+          <small>Read aloud and see each word you got right, highlighted. Works offline.</small>
+        </button>
+        <button class="card feature" data-go="level">
+          <span class="card-icon">📊</span><strong>Free Level Test</strong>
+          <small>Answer 5 questions and get your CEFR level (A1–C2) with a skill breakdown.</small>
+        </button>
+        <button class="card feature" data-go="scenario:meeting">
+          <span class="card-icon">📈</span><strong>Business English</strong>
+          <small>Meetings, updates, small talk with colleagues and presentations.</small>
+        </button>
+      </div>
+    </section>
+
+    <!-- TALK -->
+    <section class="view" id="view-talk">
+      <header class="page-head">
+        <h1>AI Conversation</h1>
+        <p class="lead">Choose a situation. Speak naturally and your tutor replies out loud, correcting your grammar as you go. When you finish, tap <b>End &amp; get feedback</b> for your full report.</p>
+      </header>
+      <div class="grid scenarios" id="scenarioGrid"></div>
+    </section>
+
+    <!-- SESSION -->
+    <section class="view" id="view-session">
+      <div class="session">
+        <header class="session-head">
+          <button class="btn ghost" id="sessBack" aria-label="Back">←</button>
+          <div class="session-title"><strong id="sessTitle"></strong><small id="sessSub"></small></div>
+          <button class="btn primary" id="sessEnd">End &amp; get feedback</button>
+        </header>
+        <div class="chat" id="chat" aria-live="polite"></div>
+        <footer class="composer">
+          <div class="live" id="live"></div>
+          <div class="composer-row">
+            <div class="switches">
+              <label class="switch" title="Automatically listen after the tutor speaks, and send when you pause">
+                <input type="checkbox" id="handsFree"><span class="track"></span><span>Hands-free</span>
+              </label>
+              <label class="switch hidden" id="answerEnWrap" title="The microphone listens for English, and the tutor shows you how to say it in the language you're learning">
+                <input type="checkbox" id="answerEn"><span class="track"></span><span>I'll speak English</span>
+              </label>
+            </div>
+            <div class="mic-wrap">
+              <button class="mic idle" id="micBtn" aria-label="Microphone"></button>
+              <small id="micHint">Tap to speak</small>
+              <div class="level" id="micLevel" title="Microphone volume"><i></i></div>
+            </div>
+            <label class="speed" title="Tutor speaking speed">
+              <span>Speed</span>
+              <select id="rateQuick">
+                <option value="0.7">0.7×</option>
+                <option value="0.8">0.8×</option>
+                <option value="0.9">0.9×</option>
+                <option value="0.95">0.95×</option>
+                <option value="1">1×</option>
+                <option value="1.1">1.1×</option>
+                <option value="1.2">1.2×</option>
+              </select>
+            </label>
+          </div>
+          <form class="text-form" id="textForm">
+            <input id="textInput" placeholder="…or type your answer" autocomplete="off" aria-label="Type your answer">
+            <button class="btn" type="submit">Send</button>
+          </form>
+        </footer>
+      </div>
+    </section>
+
+    <!-- IELTS -->
+    <section class="view" id="view-ielts">
+      <header class="page-head">
+        <h1>IELTS Speaking Mock Test</h1>
+        <p class="lead">A realistic, timed test in a video examiner room. The examiner asks each question out loud, the timings match the real exam, and you get band scores for all four official criteria.</p>
+      </header>
+      <div class="grid two">
+        <div class="card">
+          <h3>Test format</h3>
+          <ol class="format">
+            <li><b>Part 1 · Interview</b> (4–5 min): 6 questions about familiar topics. About 40 seconds per answer.</li>
+            <li><b>Part 2 · Long turn</b> (3–4 min): a cue card, 1 minute to prepare, then speak for up to 2 minutes.</li>
+            <li><b>Part 3 · Discussion</b> (4–5 min): 4 deeper questions linked to Part 2. About 1 minute per answer.</li>
+          </ol>
+          <p class="muted small">Tip: turn on your camera in the test room to practise eye contact and body language, like in a face-to-face test. Nothing is recorded or uploaded.</p>
+        </div>
+        <div class="card choose">
+          <h3>Choose a test</h3>
+          <button class="btn primary block" data-go="ielts:full">🎓 Full mock test <small>~14 min</small></button>
+          <button class="btn block" data-go="ielts:p1">Part 1 only <small>~5 min</small></button>
+          <button class="btn block" data-go="ielts:p2">Part 2 only <small>~3 min</small></button>
+          <button class="btn block" data-go="ielts:p3">Part 3 only <small>~5 min</small></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL TEST -->
+    <section class="view" id="view-level">
+      <header class="page-head">
+        <h1>Free English Speaking Level Test</h1>
+        <p class="lead">Answer 5 spoken questions that get harder as you go. You'll get your CEFR level (A1–C2) with scores for fluency, grammar, vocabulary and pronunciation.</p>
+      </header>
+      <div class="card level-card">
+        <div class="cefr-scale">
+          <span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span><span>C2</span>
+        </div>
+        <ul class="list">
+          <li>Takes about 6 minutes. Find a quiet place.</li>
+          <li>Each question has a timer. Speak for as long as you can.</li>
+          <li>Some questions give you a few seconds to prepare first.</li>
+        </ul>
+        <button class="btn primary" id="levelStart">Start the level test</button>
+      </div>
+    </section>
+
+    <!-- TEST ROOM -->
+    <section class="view" id="view-test">
+      <header class="session-head">
+        <button class="btn ghost" id="testExit">✕ Exit</button>
+        <div class="session-title"><strong id="testTitle"></strong><small id="testProgressLabel"></small></div>
+        <button class="btn" id="camBtn">📷 Camera on</button>
+      </header>
+      <div class="progress-track"><i id="testProgressBar"></i></div>
+      <div class="test-stage">
+        <div class="examiner" id="examiner">
+          <div class="examiner-avatar">👩‍🏫<span class="waves"><i></i><i></i><i></i></span></div>
+          <strong>Examiner</strong><small id="examinerState">Getting ready</small>
+        </div>
+        <div class="cam" id="camBox">
+          <video id="camVideo" autoplay muted playsinline></video>
+          <div class="cam-off">🙂<small>Camera is off</small></div>
+          <span class="rec-dot hidden" id="recDot">● REC</span>
+        </div>
+      </div>
+      <div class="card test-card">
+        <span class="part-tag" id="testPart"></span>
+        <h2 id="testQuestion"></h2>
+        <ul class="cue" id="testCue"></ul>
+        <div class="timer hidden" id="timer">
+          <div class="timer-top"><span id="timerLabel"></span><b id="timerText"></b></div>
+          <div class="timer-bar"><i id="timerFill"></i></div>
+        </div>
+        <div class="live big" id="testLive"></div>
+        <div class="row end"><button class="btn primary" id="testNext">Skip ▸</button></div>
+      </div>
+    </section>
+
+    <!-- PRONUNCIATION -->
+    <section class="view" id="view-pron">
+      <header class="page-head">
+        <h1>Pronunciation Coach</h1>
+        <p class="lead">Listen, then read the sentence aloud. Green words were understood clearly; red words need more practice. Tap any word to hear it slowly.</p>
+      </header>
+      <div class="tabs" id="pronTabs"></div>
+      <div class="card pron-card">
+        <p class="muted" id="pronTip"></p>
+        <div class="pron-sentence" id="pronSentence"></div>
+        <div class="pron-help" id="pronHelp"></div>
+        <div class="row center wrap">
+          <button class="btn" id="pronPrev" aria-label="Previous sentence">←</button>
+          <button class="btn" id="pronListen">🔊 Listen</button>
+          <button class="btn" id="pronSlow">🐢 Slow</button>
+          <button class="btn primary rec-btn" id="pronRec">🎙️ Record</button>
+          <button class="btn" id="pronNext" aria-label="Next sentence">→</button>
+        </div>
+        <p class="center muted small"><span id="pronCount"></span></p>
+        <p class="live center" id="pronLive"></p>
+        <div id="pronResult"></div>
+      </div>
+      <form class="card text-form" id="pronCustomForm">
+        <input id="pronCustom" placeholder="Practise your own sentence, e.g. a line from your presentation" autocomplete="off" aria-label="Custom sentence">
+        <button class="btn" type="submit" id="pronCustomBtn">Practise it</button>
+      </form>
+    </section>
+
+    <!-- PROGRESS -->
+    <section class="view" id="view-progress">
+      <header class="page-head row between">
+        <h1>Your progress</h1>
+        <button class="btn ghost small" id="clearProgress">Clear history</button>
+      </header>
+      <div class="grid stats5" id="progressStats"></div>
+      <div class="card"><h3>Score trend</h3><div id="progressChart"></div></div>
+      <div class="card"><h3>History</h3><div id="historyList"></div></div>
+    </section>
+
+    <!-- REPORT -->
+    <section class="view" id="view-report"><div id="reportBody"></div></section>
+
+    <!-- SETTINGS -->
+    <section class="view" id="view-settings">
+      <header class="page-head"><h1>Settings</h1></header>
+
+      <div class="card">
+        <h3>🧠 AI brain (free)</h3>
+        <p class="muted small">The conversation, corrections and test scoring use a free AI service. Your key is saved only in this browser and is sent only to the provider you choose.</p>
+        <label class="field">Provider<select id="setProvider"></select></label>
+        <p class="help" id="providerHelp"></p>
+        <div class="field" id="keyRow">
+          <label for="setKey">API key</label>
+          <div class="input-row"><input id="setKey" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your key here"><button class="btn" id="toggleKey" type="button">Show</button></div>
+        </div>
+        <div class="field">
+          <label for="setModel">Model <small class="muted">(leave empty for the default)</small></label>
+          <div class="input-row"><input id="setModel" autocomplete="off" spellcheck="false" list="modelList"><button class="btn" id="findModels" type="button">🔍 Find models</button></div>
+          <datalist id="modelList"></datalist>
+          <small class="muted" id="findModelsResult"></small>
+        </div>
+        <div class="row"><button class="btn primary" id="testAI">Test connection</button><span id="testAIResult" class="muted small"></span></div>
+      </div>
+
+      <div class="card">
+        <h3>👤 About you</h3>
+        <div class="grid two tight">
+          <label class="field">Your name<input id="setName" autocomplete="given-name" placeholder="Optional"></label>
+          <label class="field">Your level
+            <select id="setLevel">
+              <option value="beginner">Beginner (A1–A2)</option>
+              <option value="intermediate">Intermediate (B1–B2)</option>
+              <option value="advanced">Advanced (C1–C2)</option>
+            </select>
+          </label>
+        </div>
+        <label class="switch field-switch">
+          <input type="checkbox" id="setSpeakCorr"><span class="track"></span>
+          <span>Teacher mode: explain my mistakes out loud before asking the next question</span>
+        </label>
+        <label class="field">Explain corrections also in my language <small class="muted">(optional, e.g. Hindi, Spanish, Arabic)</small><input id="setNative" placeholder="Leave empty for English only"></label>
+      </div>
+
+      <div class="card">
+        <h3>🔊 Voice &amp; speech</h3>
+        <div class="grid two tight">
+          <label class="field">Accent
+            <select id="setLang">
+              <option value="en-US">American English</option>
+              <option value="en-GB">British English</option>
+              <option value="en-AU">Australian English</option>
+              <option value="en-CA">Canadian English</option>
+              <option value="en-IN">Indian English</option>
+            </select>
+          </label>
+          <div class="field"><label for="setVoice">Tutor voice</label>
+            <div class="input-row"><select id="setVoice"></select><button class="btn" id="voiceTest" type="button">▶</button></div>
+          </div>
+        </div>
+        <label class="field">Tutor speaking speed <b id="rateVal"></b><input type="range" id="setRate" min="0.6" max="1.3" step="0.05"></label>
+        <label class="field">Hands-free mode: send my answer after a pause of <b id="silenceVal"></b><input type="range" id="setSilence" min="1.5" max="5" step="0.5"></label>
+        <div class="field">
+          <label>Microphone check</label>
+          <div class="row wrap" style="margin:0"><button class="btn" id="micTestBtn" type="button">🎙️ Test microphone</button><small class="muted" id="micTestDevice"></small></div>
+          <div class="level wide" id="micTestLevel"><i></i></div>
+          <p id="micTestResult" class="muted small" style="margin:0"></p>
+        </div>
+        <p class="muted small">Voice input uses your browser's built-in speech recognition. It works best in Chrome or Edge. Voices in Edge ("Natural" voices) sound the most human.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="inputDialog">
+  <form method="dialog">
+    <label class="field"><span id="inputLabel"></span><input id="inputValue" autocomplete="off"></label>
+    <div class="row end">
+      <button class="btn" value="cancel" formnovalidate>Cancel</button>
+      <button class="btn primary" value="ok">Start</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="busy" role="status"><div class="spinner"></div><p id="busyMsg">Working…</p></div>
+<div id="toast" role="alert"></div>
+
+<!-- Bump ?v= after editing these files so browsers load the new version. -->
+<script src="js/data.js?v=11"></script>
+<script src="js/store.js?v=11"></script>
+<script src="js/speech.js?v=11"></script>
+<script src="js/ai.js?v=11"></script>
+<script src="js/app.js?v=11"></script>
+</body>
+</html>
